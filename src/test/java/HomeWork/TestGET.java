@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class TestGET {
 
     @Test
-    public void testHelloWorld(){
+    public void testGetRequest(){
         Response response = RestAssured
                 .get("https://playground.learnqa.ru/api/get_text")
                 .andReturn();
