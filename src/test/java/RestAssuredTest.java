@@ -19,7 +19,7 @@ public class RestAssuredTest {
                 .queryParams(params)
                 .get("https://playground.learnqa.ru/api/hello")
                 .jsonPath();
-
+//Получаем из переменной респонм ключ ансвер и записываем его в переменную
         String answer = response.get("answer");
 
         if (answer == null) {
