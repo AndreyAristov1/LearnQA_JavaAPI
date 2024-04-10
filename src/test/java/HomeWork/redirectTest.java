@@ -24,7 +24,7 @@ public class redirectTest {
         location = response.getHeader("Location");
         System.out.println("URL по которому осуществляется переход " + location);
         int statusCode = response.statusCode();
-            System.out.println("Rjl код ответа " + statusCode);
+            System.out.println("Код ответа " + statusCode);
         if(statusCode ==200)break;
 
 
