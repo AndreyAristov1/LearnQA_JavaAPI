@@ -13,12 +13,13 @@ public class RestAssuredTest {
         Map<String, String> params = new HashMap<>();
         params.put("name", "John");
         //Создаём переменную в которой будет храниться полученный ответ и парсим в формат json
-        JsonPath response = io.restassured.RestAssured
+        JsonPath response = RestAssured
                 .given() //говорит что далее будет передача параметров
                 // .queryParam("name", "John") //Передаём нужные параметры
                 .queryParams(params)
                 .get("https://playground.learnqa.ru/api/hello")
                 .jsonPath();
+        response.prettyPrint();
 //Получаем из переменной респонм ключ ансвер и записываем его в переменную
         String answer = response.get("answer");
 
