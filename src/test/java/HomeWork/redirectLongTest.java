@@ -19,6 +19,7 @@ public class redirectLongTest {
                 .get(location)
                 .andReturn();
 
+
         response.prettyPrint();
 
         location = response.getHeader("Location");

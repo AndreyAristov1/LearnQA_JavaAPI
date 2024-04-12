@@ -34,8 +34,8 @@ public class CheckingCookie {
                 .when()
                 .post("https://playground.learnqa.ru/api/check_auth_cookie")
                 .andReturn();
-//Выводим текст второго запроса
-        responseForCheck.print();
+
+
 
 
     }
