@@ -54,7 +54,6 @@ public class secretPasswordTest {
                     .when()
                     .post("https://playground.learnqa.ru/api/check_auth_cookie")
                     .andReturn();
-            responseForCheck.print();
 
             if(responseForCheck.print().equals("You are authorized")) break;
 
