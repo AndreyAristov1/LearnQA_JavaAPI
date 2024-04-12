@@ -39,7 +39,7 @@ public class secretPasswordTest {
                     .body(data)
                     .post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework")
                     .andReturn();
-            response.print();
+            //response.print();
 
 
             String responseCookie = response.cookie("auth_cookie");
@@ -55,7 +55,12 @@ public class secretPasswordTest {
                     .post("https://playground.learnqa.ru/api/check_auth_cookie")
                     .andReturn();
 
-            if(responseForCheck.print().equals("You are authorized")) break;
+            if(responseForCheck.print().equals("You are authorized")){
+                System.out.println("Верный пароль");
+            response.print();
+            break;}
+
+
 
         }
 
