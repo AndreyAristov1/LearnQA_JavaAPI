@@ -26,9 +26,7 @@ public class secretPasswordTest {
                 "azerty", "loveme", "whatever", "donald", "batman", "zaq1zaq1", "000000", "123qwe"
         };
 
-        for (int i = 0;  i < passwords.length; i++) {
-             String password;
-            password = passwords[i];
+        for (String password : passwords) {
 
             Map<String, String> data = new HashMap<>();
             data.put("login", "super_admin");
@@ -39,8 +37,6 @@ public class secretPasswordTest {
                     .body(data)
                     .post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework")
                     .andReturn();
-            //response.print();
-
 
             String responseCookie = response.cookie("auth_cookie");
             Map<String, String> cookies = new HashMap<>();
