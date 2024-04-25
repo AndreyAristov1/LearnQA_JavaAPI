@@ -10,13 +10,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import  io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.junit.jupiter.api.DisplayName;
+import lib.ApiCoreRequests;
 
+
+@Epic("Кейсы авторизации")
+@Feature("Авторизация")
 public class UserAuthTest extends BaseTestCase {
     String UserLoginUrl = "https://playground.learnqa.ru/api/user/login";
     String UserAuthUrl = "https://playground.learnqa.ru/api/user/auth";
@@ -24,7 +30,7 @@ public class UserAuthTest extends BaseTestCase {
     String cookie;
     String header;
     int userIdOnAuth;
-
+private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
     @BeforeEach
 
     public  void loginUser(){
@@ -34,11 +40,8 @@ public class UserAuthTest extends BaseTestCase {
         authData.put("email", "vinkotov@example.com");
         authData.put("password", "1234");
 
-        Response responseGetAuth = RestAssured
-                .given()
-                .body(authData)
-                .post(UserLoginUrl)
-                .andReturn();
+        Response responseGetAuth = apiCoreRequests
+                .makePostRequest(UserLoginUrl, authData);
 
         this.cookie = this.getCookie(responseGetAuth,"auth_sid");
         this.header = this.getHeader(responseGetAuth,"x-csrf-token");
@@ -46,38 +49,32 @@ public class UserAuthTest extends BaseTestCase {
 
     }
     @Test
-
+@Description("Успешная авторизация пользователя по почте и паролю")
+    @DisplayName("Позитивный тест")
     public void testAuthUser(){
 
-
-
-        Response responseCheckAuth = RestAssured
-                .given()
-                .header("x-csrf-token", this.header)
-                .cookie("auth_sid", this.cookie)
-                .get(UserAuthUrl)
-                .andReturn();
+        Response responseCheckAuth = apiCoreRequests
+                .makeGetRequest(UserAuthUrl, this.header, this.cookie);
 
         Assertions.asserJsonByName(responseCheckAuth,"user_id", this.userIdOnAuth);
 
 
     }
-
-    @ParameterizedTest
+@Description("Этот тест проверяет статус авторизации без отправки файла cookie аутентификации или хедера.")
+    @DisplayName("Негативный тест авторизации пользователя")
+@ParameterizedTest
     @ValueSource(strings = {"cookie", "headers"})
-    public void testNegativeAuthUser(String condition){
+    public void testNegativeAuthUser(String condition) {
 
-        RequestSpecification spec = RestAssured.given();
-        spec.baseUri(UserAuthUrl);
-        if (condition.equals("cookie")){
-            spec.cookie("auth_sid", this.cookie);
-        } else if(condition.equals("headers")){
-            spec.header("x-csrf-token",this.header);
-        }else {
-            throw  new IllegalArgumentException("Значение условия известно:" + condition);
-        }
+    if (condition.equals("cookie")) {
+        Response responseForCheck = apiCoreRequests.makeGetRequestWithCookie(UserAuthUrl, this.cookie);
 
-        Response responseForChek = spec.get().andReturn();
-        Assertions.asserJsonByName(responseForChek, "user_id", 0);
+        Assertions.asserJsonByName(responseForCheck, "user_id", 0);
+    } else if (condition.equals("headers")) {
+        Response responseForCheck = apiCoreRequests.makeGetRequestWithToken(UserAuthUrl, this.header);
+        Assertions.asserJsonByName(responseForCheck, "user_id", 0);
+    } else {
+        throw new IllegalArgumentException("Значение условия известно:" + condition);
     }
+}
 }
