@@ -46,4 +46,12 @@ public class ApiCoreRequests {
                 .post(url)
                 .andReturn();
     }
+    @Step("Запрос для регистрации")
+    public Response makePostRegistration(String url, Map<String,String> userData){
+        return given()
+                .filter(new AllureRestAssured())
+                .body(userData)
+                .post(url)
+                .andReturn();
+    }
 }
