@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: HomeWork.StringLengthTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.062 s <<< FAILURE! - in HomeWork.StringLengthTest
+testStringLength  Time elapsed: 0.061 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: Длинна строки меньше 15 ==> expected: <true> but was: <false>
+	at HomeWork.StringLengthTest.testStringLength(StringLengthTest.java:15)
+
