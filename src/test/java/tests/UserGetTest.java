@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Description;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.Assertions;
@@ -61,6 +62,7 @@ public class UserGetTest extends BaseTestCase {
         Assertions.assertJsonHasField(responseUserData, "username");
 
     }
+    @Description("Запрос данных другого пользователя")
     @Test
     public void testGettingAnotherUserData() {
         Map<String, String> authData = new HashMap<>();
