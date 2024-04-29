@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class UserGetTest extends BaseTestCase {
     @Test
-            public void testGetUserNotAuth() {
+    public void testGetUserNotAuth() {
         Response responseUserData = RestAssured
                 .get("https://playground.learnqa.ru/api/user/2")
                 .andReturn();
@@ -24,7 +24,7 @@ public class UserGetTest extends BaseTestCase {
     }
 
     @Test
-    public void testUserDetailsAuthAsSameUser(){
+    public void testUserDetailsAuthAsSameUser() {
         Map<String, String> authData = new HashMap<>();
         authData.put("email", "vinkotov@example.com");
         authData.put("password", "1234");
@@ -44,13 +44,58 @@ public class UserGetTest extends BaseTestCase {
                 .cookie("auth_sid", cookie)
                 .get("https://playground.learnqa.ru/api/user/2")
                 .andReturn();
+        responseUserData.prettyPrint();
 
-        String[] expectedFields ={"username", "firstName", "lastName", "email"};
-        Assertions.assertJsonHaFields(responseUserData, expectedFields);
+
+        String[] expectedFields = {"username", "firstName", "lastName", "email"};
+        Assertions.assertJsonHasFields(responseUserData, expectedFields);
 
         Assertions.assertJsonHasField(responseUserData, "username");
         Assertions.assertJsonHasField(responseUserData, "firstName");
         Assertions.assertJsonHasField(responseUserData, "lastName");
         Assertions.assertJsonHasField(responseUserData, "email");
+
+        String[] expectedField = {"username"};
+        Assertions.assertJsonHasFields(responseUserData, expectedFields);
+
+        Assertions.assertJsonHasField(responseUserData, "username");
+
+    }
+    @Test
+    public void testGettingAnotherUserData() {
+        Map<String, String> authData = new HashMap<>();
+        authData.put("email", "vinkotov@example.com");
+        authData.put("password", "1234");
+
+        Response responseGetAuth = RestAssured
+                .given()
+                .body(authData)
+                .post("https://playground.learnqa.ru/api/user/login")
+                .andReturn();
+
+        String header = this.getHeader(responseGetAuth, "x-csrf-token");
+        String cookie = this.getCookie(responseGetAuth, "auth_sid");
+
+        Response responseUserData = RestAssured
+                .given()
+                .header("x-csrf-token", header)
+                .cookie("auth_sid", cookie)
+                .get("https://playground.learnqa.ru/api/user/1")
+                .andReturn();
+        responseUserData.prettyPrint();
+
+
+        String[] expectedField = {"username"};
+        Assertions.assertJsonHasFields(responseUserData, expectedField);
+
+        Assertions.assertJsonHasField(responseUserData, "username");
+
+
+        String[] expectedFields = {"firstName", "lastName", "email"};
+        Assertions.assertJsonHasNotFields(responseUserData, expectedFields);
+        Assertions.assertJsonHasNotField(responseUserData, "firstName");
+        Assertions.assertJsonHasNotField(responseUserData, "lastName");
+        Assertions.assertJsonHasNotField(responseUserData, "email");
+
     }
 }
