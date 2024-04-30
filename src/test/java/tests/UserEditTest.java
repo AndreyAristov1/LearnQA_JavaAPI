@@ -17,7 +17,7 @@ import java.util.Map;
 public class UserEditTest extends BaseTestCase {
     String LoginURL = "https://playground.learnqa.ru/api/user/login";
     String EditeURL = "https://playground.learnqa.ru/api/user/";
-    String UserAuthUrl = "https://playground.learnqa.ru/api/user/auth";
+
 
     String cookie;
     String header;
